@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { v4 as uuidv4 } from 'uuid';
 
-function TodoForm(props) {
-  const [input, setInput] = useState(props.edit ? props.edit.value : '');
+function TodoForm({ onSubmit, edit }) {
+  const [input, setInput] = useState(edit ? edit.value : '');
 
   const inputRef = useRef(null);
 
@@ -16,7 +17,7 @@ function TodoForm(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    props.onSubmit({
+    onSubmit({
       id: uuidv4(),
       text: input,
     });
@@ -24,7 +25,7 @@ function TodoForm(props) {
   };
   return (
     <form onSubmit={handleSubmit} className="todo-form">
-      {props.edit ? (
+      {edit ? (
         <>
           <input
             type="text"
@@ -55,9 +56,19 @@ function TodoForm(props) {
           </button>
         </>
       )}
-      }
     </form>
   );
 }
+
+TodoForm.defaultProps = {
+  onSubmit: () => {},
+};
+
+TodoForm.propTypes = {
+  onSubmit: PropTypes.func,
+  edit: PropTypes.arrayOf({
+    value: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default TodoForm;

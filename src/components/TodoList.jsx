@@ -22,18 +22,21 @@ function TodoList() {
   };
 
   const completeTodo = (id) => {
-    const UpdatedTodos = todos.map((todo) => {
+    const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        todo.isComplete = !todo.isComplete;
+        return {
+          ...todo,
+          isComplete: !todo.isComplete,
+        };
       }
       return todo;
     });
-    setTodos(UpdatedTodos);
+    setTodos(updatedTodos);
   };
 
   return (
     <div>
-      <h1>What's the place for today</h1>
+      <h1>What&apos;s the place for today</h1>
       <TodoForm onSubmit={addTodo} />
 
       <Todo

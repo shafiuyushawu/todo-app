@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import TodoForm from './TodoForm';
 
@@ -22,14 +23,19 @@ const Todo = ({
     return <TodoForm edit={edit} onSubmit={submitUpdate} />;
   }
 
-  return todos.map((todo, index) => (
+  return todos.map((todo) => (
     <div
       className={todo.isComplete ? 'todo-row complete' : 'todo-row'}
-      key={index}
+      key={todo.id}
     >
-      <div key={todo.id} onClick={() => completeTodo(todo.id)}>
+      <button
+        type="button"
+        key={todo.id}
+        onClick={() => completeTodo(todo.id)}
+        onKeyDown={(e) => e.key === 'Enter' && completeTodo(todo.id)}
+      >
         {todo.text}
-      </div>
+      </button>
       <div className="icons">
         <FaEdit
           onClick={() => setEdit({ id: todo.id, value: todo.text })}
@@ -39,6 +45,23 @@ const Todo = ({
       </div>
     </div>
   ));
+};
+
+Todo.defaultProps = {
+  completeTodo: () => {},
+  removeTodo: () => {},
+  updateTodo: () => {},
+};
+
+Todo.propTypes = {
+  todos: PropTypes.arrayOf({
+    id: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    isComplete: PropTypes.bool.isRequired,
+  }).isRequired,
+  completeTodo: PropTypes.func,
+  removeTodo: PropTypes.func,
+  updateTodo: PropTypes.func,
 };
 
 export default Todo;
